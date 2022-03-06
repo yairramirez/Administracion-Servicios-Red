@@ -1,17 +1,19 @@
 import sys
 import rrdtool
 import time
-tiempo_actual = int(time.time())
-#Grafica desde el tiempo actual menos diez minutos
-tiempo_inicial = tiempo_actual - 1800
+
+def Graficar( grafico, nombre, minutos ):
+  tiempo_actual = int(time.time())
+  #Grafica desde el tiempo actual menos diez minutos
+  tiempo_inicial = tiempo_actual - minutos
 
 
-ret = rrdtool.graph( "traficoRED.png",
-                     "--start",str(tiempo_inicial),
-                     "--end","N",
-                     "--vertical-label=Bytes/s",
-                     "--title=Tráfico de Red de un agente \n Usando SNMP y RRDtools",
-                     "DEF:inoctets=traficoRED.rrd:inoctets:AVERAGE",
-                     "DEF:outoctets=traficoRED.rrd:outoctets:AVERAGE",
-                     "AREA:inoctets#00FF00:Tráfico de entrada",
-                     "LINE3:outoctets#0000FF:Tráfico de salida")
+  ret = rrdtool.graph( nombre + ".png",
+                      "--start",str(tiempo_inicial),
+                      "--end","N",
+                      "--vertical-label=Bytes/s",
+                      "--title=" + grafico + " \n Usando SNMP y RRDtools",
+                      "DEF:inoctets=" + nombre + ".rrd:inoctets:AVERAGE",
+                      "DEF:outoctets=" + nombre + ".rrd:outoctets:AVERAGE",
+                      "AREA:inoctets#00FF00:Tráfico de entrada",
+                      "LINE3:outoctets#0000FF:Tráfico de salida")

@@ -1,15 +1,15 @@
 from pysnmp.hlapi import *
 
-def consultaSNMP(comunidad,host,oid):
+def consultaSNMP(comunidad, version, host, puerto, oid):
     errorIndication, errorStatus, errorIndex, varBinds = next(
         getCmd(SnmpEngine(),
-               CommunityData(comunidad),
-               UdpTransportTarget((host, 161)),
+               CommunityData(comunidad, mpModel=version),
+               UdpTransportTarget((host, puerto)),
                ContextData(),
                ObjectType(ObjectIdentity(oid))))
 
     if errorIndication:
-        print(errorIndication)
+        resultado = 'Error'
     elif errorStatus:
         print('%s at %s' % (errorStatus.prettyPrint(),errorIndex and varBinds[int(errorIndex) - 1][0] or '?'))
     else:
